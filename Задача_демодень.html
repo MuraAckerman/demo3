@@ -1,0 +1,154 @@
+<html>
+	<head>
+		<script>
+			/*"Дана числовая матрица X1(N, N).
+            Получить матрицу Х2 из X1, расположив элементы матрицы X1 в порядке возрастания (построчно слева направо).
+            Получить матрицы X3 и Х4, заменяя двойками в матрицах XI и Х2 (соответственно) элементы с нечетной суммой индексов 
+            (то есть I+J в сумме должны давать нечетное число).
+            Сравнить произведение всех элементов матрицы ХЗ с произведением всех элементов матрицы Х4.
+            Получить матрицу Y, используя следующее условие:
+            - если произведение элементов матрицы X3 меньше произведения элементов матрицы Х4, то элемент матрицы Y получить так: 
+            из соответствующего элемента матрицы Х2 вычесть соответствующий элемент матрицы Х3.
+            - в противном случае: соответствующий элемент матрицы Х3 умножить на соответствующий элемент матрицы XI.
+            Напечатать матрицы X2, Y." */
+
+            let N = +prompt("Введите размер матрицы: ");
+            let matrix_x1 = [];
+
+            let vvod = +prompt("Для самостоятельного ввода введите 1, или 2 чтобы массив сам запонился или 3 где уже присутствует готовый массив");
+            switch(vvod) {
+                case 1:
+                    for (let i = 0; i < N; i++) {
+                        matrix_x1[i] = [];
+                        for (let j = 0; j < N; j++) {
+                            matrix_x1[i][j] = +prompt((i+1) + " элемент массива = ");
+                        }
+                    };
+                    break;
+
+				case 2: 
+                    for (let i = 0; i < N; i++) {
+                        matrix_x1[i] = [];
+                        for (let j = 0; j < N; j++) {
+                            matrix_x1[i][j] = (Math.round(Math.random()*100));
+                        }
+                    }
+                    break;
+
+                default: 
+                    matrix_x1 = [[1, 9, 4], [2, 8, 5], [3, 7, 6]];
+                	break;
+            };
+            
+            document.write("Двумерный массив матрицы Х1: " + "<br\>" + matrix_x1.join('<br\>') + "<br\>");
+
+            // Двумерный массив сделали одномерным - работает
+            let matrix_x1_2 = [];
+            for (let i = 0; i < matrix_x1.length; i++) {    
+                for (let j = 0; j < matrix_x1[i].length; j++) {
+                    matrix_x1_2.push(matrix_x1[i][j])
+                }
+            }
+            document.write("Двумерный массив теперь одномерный (матрица Х1): " + "<br\>" + matrix_x1_2.join(' ') + "<br\>");
+
+            // Для одномерного массива в порядке возрастания - работает
+            for (let n = 0; n < matrix_x1_2.length; n++) {      
+                for (let i = 0; i < matrix_x1_2.length; i++) {
+                    if (matrix_x1_2[i] > matrix_x1_2[i+1]) {
+                        let m = matrix_x1_2[i];
+                        matrix_x1_2[i] = matrix_x1_2[i+1];
+                        matrix_x1_2[i+1] = m;
+                    }
+                }
+            }
+            document.write("Эл-ты матрицы одномерного массива в порядке возрастания (матрица Х1): " + "<br\>" + matrix_x1_2.join(' ') + "<br\>");
+
+            //Одномерный массив стал двумерным - работает 
+            let matrix_x2 = [];
+            for (i = 0; i < matrix_x1_2.length; i += 3) {
+                if (matrix_x1_2[i] != undefined && matrix_x1_2[i + 1] != undefined && matrix_x1_2[i + 2] != undefined) {
+                    matrix_x2.push([matrix_x1_2[i], matrix_x1_2[i + 1], matrix_x1_2[i + 2]]);
+                }
+            }
+            document.write("Одномерный массив стал двумерным (матрица Х2): " + "<br\>" + matrix_x2.join('<br\>') + "<br\>");
+            
+
+            //замена i+j двойками - работает
+            let matrix_x3 = [];
+            for (let i = 0; i < matrix_x1.length; i++) {      
+                     matrix_x3[i] = matrix_x1[i].slice();
+            }
+
+            for (let i = 0; i < matrix_x3.length; i++) {      
+                for (let j = 0; j < matrix_x3.length; j++) {
+                    if ((i + j) % 2 != 0) {
+                        matrix_x3[i][j] = 2;
+                    }
+                }
+            }
+            document.write("Замена двойками i+j(если сумма нечёт) матрицы Х3: " + "<br\>" + matrix_x3.join('<br\>') + "<br\>");
+            
+            let matrix_x4 = [];
+            for (let i = 0; i < matrix_x2.length; i++) {      
+                     matrix_x4[i] = matrix_x2[i].slice();
+            }
+
+            for (let i = 0; i < matrix_x4.length; i++) {      
+                for (let j = 0; j < matrix_x4.length; j++) {
+                    if ((i + j) % 2 != 0) {
+                        matrix_x4[i][j] = 2;
+                    }
+                }
+            }
+            document.write("Замена двойками i+j(если сумма нечёт) матрицы Х4: " + "<br\>" + matrix_x4.join('<br\>') + "<br\>");
+
+            // Произведение матриц Х3 и Х4
+            let m = 1;  // Для Х3 
+            for(let i = 0; i < matrix_x3.length; i++) {
+                for (let j = 0; j < matrix_x3.length; j++) {
+                    m *= matrix_x3[i][j];
+                }
+                
+            }
+            document.write("Произведение всех элементов матрицы Х3: " + m + "<br\>");
+
+            let g = 1;  //Для Х4
+            for(let i = 0; i < matrix_x4.length; i++) {
+                for (let j = 0; j < matrix_x4.length; j++) {
+                    g *= matrix_x4[i][j];
+                }
+                
+            }
+            document.write("Произведение всех элементов матрицы Х4: " + g + "<br\>");
+
+
+            // Получить матрицу Y
+            let matrix_Y1 = [];
+            if (m < g) {
+                for (let i = 0; i < matrix_x2.length; i++) {
+                    for (let j = 0; j < matrix_x2.length; j++) {
+                        matrix_Y1.push(matrix_x2[i][j] - matrix_x3[i][j]);
+                    }
+                }
+            } else {
+                for (i = 0; i < matrix_x3.length; i++) {
+                    for (j = 0; j < matrix_x3.length; j++) {
+                        matrix_Y1.push(matrix_x3[i][j] * matrix_x1[i][j]);
+                    }
+                }
+            } 
+
+            let matrix_Y = []
+            for (i = 0; i < matrix_Y1.length; i += 3) {
+                if (matrix_Y1[i] != undefined && matrix_Y1[i + 1] != undefined && matrix_Y1[i + 2] != undefined) {
+                    matrix_Y.push([matrix_Y1[i], matrix_Y1[i + 1], matrix_Y1[i + 2]]);
+                }
+            }
+            document.write("Получилась матрица Y: " + "<br\>" + matrix_Y.join('<br\>') + "<br\>");
+            
+		</script>
+	</head>
+	<body>
+		<p> </p>
+	</body>
+</html>
